@@ -1,0 +1,204 @@
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <title>Тестовое задание</title>
+
+    <link rel="stylesheet"
+          href="../css/style.css"
+          th:href="@{/css/style.css}"
+          type="text/css"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+
+<form name="indexForm" action="/click" method="POST" id="indexForm" th:object="${Task}">
+
+    <label class="label" for="typeTask"><b>Выбор задания:</b></label>
+    <select id="typeTask" size="1" required="true" name="typeSelect" onchange="categorySelector()">
+        <option value="Найти все подстроки">Найти все подстроки</option>
+        <option value="Магический квадрат">Магический квадрат</option>
+    </select>
+    <input th:field="*{type}" type="hidden" name="typeInput" class="typeInput" id="typeInput"/>
+    <br><br>
+
+<!--    Первая задача-->
+    <div class="FindSubstringTask" id="FindSubstringTask">
+        <label for="lineOne"><b>Первый массив слов:</b></label>
+        <input  th:field="*{line1}"  id="lineOneHidden" name="lineOne" class="inputLine" type="hidden"/>
+        <input  id="lineOne" name="lineOne" class="inputLine" type="text"/>
+        <input type="button" name="addLineOne" value="Добавить строку" onclick="addDeleteLine(this.name)"/>
+        <input type="button" name="deleteLineOne" value="Удалить строку" onclick="addDeleteLine(this.name)"/><br>
+        <div>
+            <span th:text="${Task.line1}" id="massiveOne" class="massiveOne"></span>
+        </div>
+        <br><br>
+
+        <label for="lineTwo"><b>Второй массив слов:</b></label>
+        <input  th:field="*{line2}"  id="lineTwoHidden" name="lineTwo" class="inputLine" type="hidden"/>
+        <input id="lineTwo" name="lineTwo" class="inputLine" type="text"/>
+        <input type="button" name="addLineTwo" value="Добавить строку" onclick="addDeleteLine(this.name)"/>
+        <input type="button" name="deleteLineTwo" value="Удалить строку" onclick="addDeleteLine(this.name)"/>
+        <div>
+            <span th:field="*{line2}" th:text="${Task.line2}" id="massiveTwo" class="massiveTwo"></span>
+        </div>
+        <br>
+    </div>
+
+<!--    Вторая задача-->
+    <div class="MagicMatrixTask" id="MagicMatrixTask">
+        <label for="matrix"><b>Матрица:</b></label>
+        <table id="matrix">
+            <tr th:each="row: ${Task.matrix}" class="rowMatrix"  name="matrix">
+                <td th:each="value: ${row}" id="cellMatrix">
+                    <input type="text" th:value="${value}" class="cellMatrix" pattern="[0-9]"/>
+                </td>
+            </tr>
+        </table>
+        <input id="matrixHidden" th:field="*{matrixString}" type="hidden"/>
+        <br>
+    </div>
+
+    <label class="solutionTxtLabel" for="solution"><b>Решение задачи:</b></label>
+    <br>
+    <textarea rows="6" cols="30"
+              name="text"
+              th:text="${solution}"
+              id="solution"
+              class="solutionTxt"></textarea>
+
+    <div class="buttonsContainer">
+        <div class="button"><input name="solve" type="submit" value="Посчитать" onclick="solve2(this.name)"></div>
+        <div class="button"><input name="save" type="submit" value="Cохранить"></div>
+        <div class="button"><input name="export" type="submit" value="Экспортировать"></div>
+        <div class="button"><input name="action" type="submit" value="Загрузить"></div>
+        <div class="button"><input name="import" type="submit" value="Импортировать"></div>
+
+        <div class="button">
+            <input name="myModel"
+                   type="submit"
+                   value="Моя кнопка"
+                   class="btn btn-primary"
+                   data-toggle="modal"
+                   data-target="#exampleModal"/>
+        </div>
+        <button type="button"  data-toggle="modal" data-target="#exampleModal">
+            Launch demo modal
+        </button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- содержимое  -->
+
+                    <!-- содержимое  -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+    <script>
+
+         var typeInput = document.getElementById("typeInput");
+         var typeSelect = document.getElementById("typeTask");
+         if(typeInput.value === "Найти все подстроки"){
+
+             typeSelect.options[0].selected = true;
+
+         } else if(typeInput.value === "Магический квадрат"){
+
+             typeSelect.options[1].selected = true;
+         }
+         categorySelector();
+
+
+
+       function solve2(name){
+           let lineOne = document.getElementById("lineOneHidden");
+           let massiveOne = document.getElementById("massiveOne");
+           lineOne.value = massiveOne.innerText;
+
+           let lineTwo = document.getElementById("lineTwoHidden");
+           let massiveTwo = document.getElementById("massiveTwo");
+           lineTwo.value = massiveTwo.innerText;
+
+           let typeTask = document.getElementById("typeTask");
+           let typeInput = document.getElementById("typeInput");
+           typeInput.value = typeTask.value;
+
+           var s="";
+           var table = document.getElementById("matrix"),
+               cells = table.getElementsByTagName("td");
+           var split;
+
+           for (var i=0,len=cells.length; i<len; i++){
+               if(i === 0) {
+                   s += "[";
+                   split = ", ";
+               }
+               else if( ((i+1) % 3 === 0) && i !== len-1)
+                   split = "] [";
+               else if(i === len-1)
+                   split = "]";
+               else  split = ", ";
+               s += cells[i].firstElementChild.value + split;
+           }
+           let matrixHidden = document.getElementById("matrixHidden");
+           matrixHidden.value = s;
+       }
+
+        function addDeleteLine(name){
+
+            if(name == "addLineOne"){
+                var lineOne = document.getElementById("lineOne");
+                var massiveOne = document.getElementById("massiveOne");
+                massiveOne.innerText  = massiveOne.innerText != ''
+                    ? massiveOne.innerText + ",   "+ lineOne.value
+                    : massiveOne.innerText + "" + lineOne.value;
+                lineOne.value = '';
+            }
+            if(name == "addLineTwo"){
+                var lineTwo = document.getElementById("lineTwo");
+                var massiveTwo = document.getElementById("massiveTwo");
+                massiveTwo.innerText  = massiveTwo.innerText != ''
+                    ? massiveTwo.innerText + ",   "+ lineTwo.value
+                    : massiveTwo.innerText + "" + lineTwo.value;
+                lineTwo.value = '';
+            }
+        }
+
+
+       function categorySelector() {
+           var i = document.getElementById("typeTask").selectedIndex;
+           var val = document.getElementsByTagName("option")[i].value;
+
+           if (val === "Магический квадрат") {
+               document.getElementById("MagicMatrixTask").style.display = "block";
+               document.getElementById("FindSubstringTask").style.display = "none";
+           } else if (val === "Найти все подстроки") {
+               document.getElementById("MagicMatrixTask").style.display = "none";
+               document.getElementById("FindSubstringTask").style.display = "block";
+           }
+
+       }
+    </script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

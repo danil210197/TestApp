@@ -1,0 +1,140 @@
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <title>Тестовое задание</title>
+    <style>
+        .buttonsContainer{
+            display: flex;
+            flex-direction: row;
+            width: 600px;
+            border: 1px solid black;
+            justify-content: space-between;
+        }
+
+        .massiveOne, .massiveTwo{
+            color: blue;
+            font-size: 20px;
+            outline: 0;
+        }
+
+        .typeInput{
+            border: 1px solid white;
+        }
+
+        .rowMatrix{
+            width: 300px;
+        }
+        .cellMatrix{
+            width: 50px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Тестовое задание для комании "Центр информационных технологий"</h1>
+    <p>Выполнил: Тараторкин Д.О.</p>
+
+
+<form name="indexForm" action="/click" method="POST" id="indexForm" th:object="${inputData}">
+
+    <label for="typeTask">Выбор задания:</label>
+    <select id="typeTask" size="1" required="true" name="typeSelect">
+        <option value="STRINGS">Найти все подстроки</option>
+        <option value="MAGIC_SQUARE">Магический квадрат</option>
+    </select>
+    <input th:field="*{type}" type="hidden" name="typeInput" class="typeInput" id="typeInput"/>
+    <br><br>
+
+    <label for="lineOne"><b>Первый массив слов:</b></label>
+    <input  th:field="*{line1}"  id="lineOneHidden" name="lineOne" class="inputLine" type="hidden"/>
+    <input  id="lineOne" name="lineOne" class="inputLine" type="text"/>
+    <input type="button" name="addLineOne" value="Добавить строку" onclick="addDeleteLine(this.name)"/>
+    <input type="button" name="deleteLineOne" value="Удалить строку" onclick="addDeleteLine(this.name)"/><br>
+    <div>
+        <span th:text="${inputData.line1}" id="massiveOne" class="massiveOne"></span>
+    </div>
+    <br><br>
+
+    <label for="lineTwo"><b>Второй массив слов:</b></label>
+    <input  th:field="*{line2}"  id="lineTwoHidden" name="lineTwo" class="inputLine" type="hidden"/>
+    <input id="lineTwo" name="lineTwo" class="inputLine" type="text"/>
+    <input type="button" name="addLineTwo" value="Добавить строку" onclick="addDeleteLine(this.name)"/>
+    <input type="button" name="deleteLineTwo" value="Удалить строку" onclick="addDeleteLine(this.name)"/>
+    <div>
+        <span th:field="*{line2}" th:text="${inputData.line2}" id="massiveTwo" class="massiveTwo"></span>
+    </div>
+
+    <table id="matrix">
+        <tr th:each="row: ${inputData.matrix}" class="rowMatrix"  name="matrix">
+            <td th:each="value: ${row}" class="cellMatrix" id="cellMatrix">
+                <input type="text" th:value="${value}" class="cellMatrix"/>
+            </td>
+        </tr>
+    </table>
+    <input id="matrixHidden" th:field="*{matrix1}" type="text"/>
+
+    <div class="buttonsContainer">
+        <div class="button"><input name="solve" type="submit" value="Посчитать" onclick="solve2(this.name)"></div>
+        <div class="button"><input name="save" type="submit" value="Cохранить"></div>
+        <div class="button"><input name="export" type="submit" value="Экспортировать"></div>
+        <div class="button"><input name="action" type="submit" value="Загрузить"></div>
+        <div class="button"><input name="import" type="submit" value="Импортировать"></div>
+    </div>
+
+
+</form>
+    <script>
+       function solve2(name){
+           let lineOne = document.getElementById("lineOneHidden");
+           let massiveOne = document.getElementById("massiveOne");
+           lineOne.value = massiveOne.innerText;
+
+           let lineTwo = document.getElementById("lineTwoHidden");
+           let massiveTwo = document.getElementById("massiveTwo");
+           lineTwo.value = massiveTwo.innerText;
+
+           let typeTask = document.getElementById("typeTask");
+           let typeInput = document.getElementById("typeInput");
+           typeInput.value = typeTask.value;
+
+           var s="";
+           var table = document.getElementById("matrix"),
+               cells = table.getElementsByTagName("td")
+
+           for (var i=0,len=cells.length; i<len; i++){
+
+               const split = (i == (len - 1)) ? "" : ",";
+               alert(cells[i].firstElementChild.value);
+               s += cells[i].firstElementChild.value + split;
+           }
+           let matrixHidden = document.getElementById("matrixHidden");
+           matrixHidden.value = s;
+           alert(s);
+           // const numbers2 = [[0, 1, 2], [3, 4, 5], [0, 1, 2] ]; // двумерный массив
+           // let matrix = document.getElementById("matrix");
+           // let matrixHidden = document.getElementById("matrixHidden");
+           // matrixHidden.value = matrix.value;
+       }
+
+        function addDeleteLine(name){
+
+            if(name == "addLineOne"){
+                var lineOne = document.getElementById("lineOne");
+                var massiveOne = document.getElementById("massiveOne");
+                massiveOne.innerText  = massiveOne.innerText != ''
+                    ? massiveOne.innerText + ",   "+ lineOne.value
+                    : massiveOne.innerText + "" + lineOne.value;
+                lineOne.value = '';
+            }
+            if(name == "addLineTwo"){
+                var lineTwo = document.getElementById("lineTwo");
+                var massiveTwo = document.getElementById("massiveTwo");
+                massiveTwo.innerText  = massiveTwo.innerText != ''
+                    ? massiveTwo.innerText + ",   "+ lineTwo.value
+                    : massiveTwo.innerText + "" + lineTwo.value;
+                lineTwo.value = '';
+            }
+        }
+    </script>
+
+</body>
+</html>

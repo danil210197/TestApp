@@ -1,0 +1,38 @@
+
+.buttonsContainer{
+    display: flex;
+    flex-direction: row;
+    width: 600px;
+    border: 1px solid black;
+    justify-content: space-between;
+}
+
+.massiveOne, .massiveTwo{
+    color: blue;
+    font-size: 20px;
+    outline: 0;
+}
+
+.typeInput{
+    border: 1px solid white;
+}
+
+.rowMatrix{
+    width: 300px;
+}
+.cellMatrix{
+    width: 50px;
+    text-align: center;
+}
+.solutionTxt{
+    font-size: 20px;
+    color: red;
+}
+
+.solutionTxtLabel{
+    font-size: 20px;
+}
+
+.MagicMatrixTask{
+    display: none;
+}
