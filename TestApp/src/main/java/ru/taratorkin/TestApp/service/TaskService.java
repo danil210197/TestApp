@@ -1,8 +1,12 @@
 package ru.taratorkin.TestApp.service;
 
 
+import org.springframework.data.repository.query.Param;
 import ru.taratorkin.TestApp.model.Task;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 
 public interface TaskService {
@@ -12,5 +16,7 @@ public interface TaskService {
     Task update(Task task);
     List<Task> findAll();
     Task create();
-    Task getById(long id);
+    Task getByTaskId(long id);
+    void exportToFile(Task task);
+    Task importFromFile(InputStream inputStream);
 }

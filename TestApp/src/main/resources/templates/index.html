@@ -9,10 +9,13 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-</head>
-<body>
 
-<form name="indexForm" action="/click" method="POST" id="indexForm" th:object="${Task}">
+</head>
+<body class="mainContainer">
+
+<form name="indexForm" enctype="multipart/form-data" action="/click" method="POST" id="indexForm" th:object="${Task}" class="formContainer">
+
+    <div class="inputOutputContainer">
 
     <label class="label" for="typeTask"><b>Выбор задания:</b></label>
     <select id="typeTask" size="1" required="true" name="typeSelect" onchange="categorySelector()">
@@ -40,7 +43,7 @@
         <input type="button" name="addLineTwo" value="Добавить строку" onclick="addDeleteLine(this.name)"/>
         <input type="button" name="deleteLineTwo" value="Удалить строку" onclick="addDeleteLine(this.name)"/>
         <div>
-            <span th:field="*{line2}" th:text="${Task.line2}" id="massiveTwo" class="massiveTwo"></span>
+            <span th:text="${Task.line2}" id="massiveTwo" class="massiveTwo"></span>
         </div>
         <br>
     </div>
@@ -59,58 +62,102 @@
         <br>
     </div>
 
+<!--    Вывод решения-->
     <label class="solutionTxtLabel" for="solution"><b>Решение задачи:</b></label>
     <br>
-    <textarea rows="6" cols="30"
+    <textarea rows="6" cols="60"
               name="text"
               th:text="${solution}"
               id="solution"
               class="solutionTxt"></textarea>
-
-    <div class="buttonsContainer">
-        <div class="button"><input name="solve" type="submit" value="Посчитать" onclick="solve2(this.name)"></div>
-        <div class="button"><input name="save" type="submit" value="Cохранить"></div>
-        <div class="button"><input name="export" type="submit" value="Экспортировать"></div>
-        <div class="button"><input name="action" type="submit" value="Загрузить"></div>
-        <div class="button"><input name="import" type="submit" value="Импортировать"></div>
-
-        <div class="button">
-            <input name="myModel"
-                   type="submit"
-                   value="Моя кнопка"
-                   class="btn btn-primary"
-                   data-toggle="modal"
-                   data-target="#exampleModal"/>
-        </div>
-        <button type="button"  data-toggle="modal" data-target="#exampleModal">
-            Launch demo modal
-        </button>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="buttonsContainer">
+        <div class="button"><input name="solve" type="submit" value="Посчитать" onclick="clickButton(this.name)"></div>
+        <div class="button"><input name="save" type="submit" value="Cохранить"  onclick="clickButton(this.name)"></div>
+        <div class="button"><input name="export" type="button" value="Экспортировать"></div>
+        <div class="button"><input name="download" type="button" value="Загрузить" onclick="clickButton(this.name)" data-toggle="modal" data-target=".bd-example-modal-lg"/>
+        </div>
+        <div class="button">
+            <input name="import" type="button" value="Импортировать" data-toggle="modal" data-target="#importModal"></div>
+    </div>
+
+     <!-- Загрузить-->
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="myLargeModalLabel">Задачи </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                <!-- содержимое  -->
                 <div class="modal-body">
-                    <!-- содержимое  -->
-
-                    <!-- содержимое  -->
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">id</th>
+                            <th scope="col">Тип задачи</th>
+                            <th scope="col">Входные данные</th>
+                            <th scope="col">Отобразить</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="task : ${tasks}" th:fragment="publicSiteHeader">
+                            <tr>
+                                <td  th:text="${task.id}"></td>
+                                <td  th:text="${task.type}"></td>
+                                <td  th:text="${task.toString()}"></td>
+                                <td><input name="display"
+                                           type="submit"
+                                           class="btn btn-primary"
+                                           value="Отобразить"
+                                           onclick="clickDisplay(this)"/>
+                                     <input name="taskId" th:value="${task.id}"  type="hidden"/>
+                                </td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
+                    <input name="selectTaskId" id="selectTaskHidden" type="hidden"/>
                 </div>
+                <!-- содержимое  -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+<!--                    <button type="button" class="btn btn-primary">Отобразить</button>-->
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Импортировать -->
+    <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Импортировать</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="file" name="file"/>
+                </div>
+                <div class="modal-footer">
+                    <button name="import" type="submit" class="btn btn-primary">Импортировать</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
 </form>
+
+
     <script>
 
          var typeInput = document.getElementById("typeInput");
@@ -125,9 +172,16 @@
          }
          categorySelector();
 
+         function clickDisplay(displayButton){
+             const row = displayButton.parentNode;
+             var selectTaskId = row.lastElementChild.value;
+             let selectTask = document.getElementById("selectTaskHidden");
+             selectTask.value = selectTaskId;
+         }
 
 
-       function solve2(name){
+       function clickButton(name){
+
            let lineOne = document.getElementById("lineOneHidden");
            let massiveOne = document.getElementById("massiveOne");
            lineOne.value = massiveOne.innerText;
@@ -163,24 +217,31 @@
 
         function addDeleteLine(name){
 
-            if(name == "addLineOne"){
-                var lineOne = document.getElementById("lineOne");
-                var massiveOne = document.getElementById("massiveOne");
-                massiveOne.innerText  = massiveOne.innerText != ''
+            var lineOne = document.getElementById("lineOne");
+            var massiveOne = document.getElementById("massiveOne");
+            var lineTwo = document.getElementById("lineTwo");
+            var massiveTwo = document.getElementById("massiveTwo");
+
+            if(name === "addLineOne"){
+                massiveOne.innerText  = massiveOne.innerText !== ''
                     ? massiveOne.innerText + ",   "+ lineOne.value
                     : massiveOne.innerText + "" + lineOne.value;
                 lineOne.value = '';
             }
-            if(name == "addLineTwo"){
-                var lineTwo = document.getElementById("lineTwo");
-                var massiveTwo = document.getElementById("massiveTwo");
-                massiveTwo.innerText  = massiveTwo.innerText != ''
+            if(name === "addLineTwo"){
+                massiveTwo.innerText  = massiveTwo.innerText !== ''
                     ? massiveTwo.innerText + ",   "+ lineTwo.value
                     : massiveTwo.innerText + "" + lineTwo.value;
                 lineTwo.value = '';
             }
-        }
+            if(name === "deleteLineOne"){
+                massiveOne.innerText = "";
+            }
+            if(name === "deleteLineTwo"){
+                massiveTwo.innerText = "";
+            }
 
+        }
 
        function categorySelector() {
            var i = document.getElementById("typeTask").selectedIndex;
@@ -195,6 +256,12 @@
            }
 
        }
+
+         function changeFile(event){
+             var tmppath = URL.createObjectURL(event.target.files[0]);
+             var pathHidden = document.getElementById("path");
+             pathHidden.value = tmppath;
+         }
     </script>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

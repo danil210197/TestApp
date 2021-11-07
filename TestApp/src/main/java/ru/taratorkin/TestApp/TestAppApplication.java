@@ -16,15 +16,15 @@ public class TestAppApplication {
 	public static void main(String[] args) {
 		ApplicationContext context = SpringApplication.run(TestAppApplication.class, args);
 
-		TaskService taskService = (TaskService) context.getBean(TaskServiceImpl.class);
-
-		Task task = new Task();
-		task.setLine1("frgtrb, gregtreg, gregtr, egregrt");
-		task.setLine2("frgtr, frgtre");
-		task.setType(TypeTask.STRINGS.toString());
-		taskService.add(task);
-
-		Task task1 = taskService.getById(1);
+//		TaskService taskService = (TaskService) context.getBean(TaskServiceImpl.class);
+//
+//		Task task = new Task();
+//		task.setLine1("frgtrb, gregtreg, gregtr, egregrt");
+//		task.setLine2("frgtr, frgtre");
+//		task.setType(TypeTask.STRINGS.toString());
+//		taskService.add(task);
+//
+//		Task task1 = taskService.getById(1);
 
 
 	}

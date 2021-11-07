@@ -38,63 +38,50 @@ public class Task {
     @Column(name = "matrix")
     private String matrixString;
 
-    @Transient
+//    @Transient
+    @Column
     private String line1;
 
-    @Transient
+//    @Transient
+    @Column
     private String line2;
+
+    @Transient
+    private String selectTask;
 
     @Transient
     private int[][] matrix = new int[3][3];
 
     public Task(String line1, String line2){
-        this.line1 = line1;
-        this.line2 = line2;
+
+        this.setLine1(line1);
+        this.setLine2(line2);
     }
 
     public void setLine1(String line1) {
-        operandFirst = Conversion.conversionOperand(line1);
-        this.line1 = line1;
+            operandFirst = Conversion.conversionOperand(line1);
+            this.line1 = line1;
     }
 
     public void setLine2(String line2) {
-        operandSecond = Conversion.conversionOperand(line2);
-        this.line2 = line2;
+            operandSecond = Conversion.conversionOperand(line2);
+            this.line2 = line2;
     }
 
     public void setMatrixString(String matrixString) {
-        this.matrix = Conversion.conversionMatrix(matrixString);
-        this.matrixString = matrixString;
+            this.matrix = Conversion.conversionMatrix(matrixString);
+            this.matrixString = matrixString;
     }
 
-    private static class Conversion{
-
-        public static List<String> conversionOperand(String operand) {
-            return Arrays.asList(operand.split(", ", -1));
+    @Override
+    public String toString() {
+        if(type.equals(TypeTask.STRINGS.toString())){
+            return String.format("a1 = %s, a2 = %s", operandFirst, operandSecond);
         }
-
-        public static int[][] conversionMatrix(String matrix) {
-
-            List<String> rows =
-                    Arrays.stream(matrix.split("[\\[\\]]+", -1)).map(String::trim)
-                            .filter(o -> !o.equals("")).collect(Collectors.toList());
-
-            int[][] result = new int[rows.size()][rows.size()];
-            int i = -1, j = -1;
-            for (String row: rows) {
-                i += 1;
-                List<String> cells = Arrays.stream(row.split(", ", -1)).map(String::trim)
-                        .collect(Collectors.toList());
-                for (String cell : cells) {
-                    j += 1;
-                    result[i][j] = Integer.parseInt(cell);
-                }
-                j = -1;
-            }
-
-            return result;
+        if(type.equals(TypeTask.MAGIC_SQUARE.toString())){
+            return matrixString;
         }
-
+        return "";
     }
 
 }
