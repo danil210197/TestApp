@@ -24,9 +24,17 @@
 		<java.version>11</java.version>
 	</properties>
 
-
+	<!-- если packaging есть, то надо его заменить -->
+	<packaging>jar</packaging>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -89,6 +97,16 @@
 		</dependency>
 
 	</dependencies>
+
+	<!-- если plugin есть, то добавлять не нужно -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 
 
 

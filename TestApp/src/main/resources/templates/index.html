@@ -75,11 +75,15 @@
     <div class="buttonsContainer">
         <div class="button"><input name="solve" type="submit" value="Посчитать" onclick="clickButton(this.name)"></div>
         <div class="button"><input name="save" type="submit" value="Cохранить"  onclick="clickButton(this.name)"></div>
-        <div class="button"><input name="export" type="button" value="Экспортировать"></div>
+        <div class="button">
+            <input name="export" type="submit" value="Экспортировать"  onclick="clickButton(this.name)">
+<!--            <input name="export" type="button" value="Экспортировать" data-toggle="modal" data-target="#exportModal">-->
+        </div>
         <div class="button"><input name="download" type="button" value="Загрузить" onclick="clickButton(this.name)" data-toggle="modal" data-target=".bd-example-modal-lg"/>
         </div>
         <div class="button">
-            <input name="import" type="button" value="Импортировать" data-toggle="modal" data-target="#importModal"></div>
+            <input name="import" type="button" value="Импортировать" data-toggle="modal" data-target="#importModal">
+        </div>
     </div>
 
      <!-- Загрузить-->
@@ -142,7 +146,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="file" name="file"/>
+                    <input type="file" name="importFile"/>
                 </div>
                 <div class="modal-footer">
                     <button name="import" type="submit" class="btn btn-primary">Импортировать</button>
@@ -150,16 +154,10 @@
                 </div>
             </div>
         </div>
-
     </div>
 
-
-
 </form>
-
-
     <script>
-
          var typeInput = document.getElementById("typeInput");
          var typeSelect = document.getElementById("typeTask");
          if(typeInput.value === "Найти все подстроки"){

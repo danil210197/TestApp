@@ -76,7 +76,7 @@ public class Task {
     @Override
     public String toString() {
         if(type.equals(TypeTask.STRINGS.toString())){
-            return String.format("a1 = %s, a2 = %s", operandFirst, operandSecond);
+            return String.format("a1 = %s; a2 = %s", operandFirst, operandSecond);
         }
         if(type.equals(TypeTask.MAGIC_SQUARE.toString())){
             return matrixString;

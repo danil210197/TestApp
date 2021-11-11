@@ -8,10 +8,9 @@ import ru.taratorkin.TestApp.model.TypeTask;
 import ru.taratorkin.TestApp.repository.TaskRepository;
 import ru.taratorkin.TestApp.service.TaskService;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.io.OutputStream;
 import java.util.List;
 
 @Service
@@ -21,7 +20,6 @@ public class TaskServiceImpl implements TaskService {
     private TaskRepository taskRepository;
 
     private ImportExportFile importExportFile;
-
 
     @Override
     public Task add(Task task) {
@@ -51,22 +49,20 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task getByTaskId(long id) {
         Task task = taskRepository.getByTaskId(id);
-        if(task.getType().equals(TypeTask.MAGIC_SQUARE.toString())) {
+        if (task.getType().equals(TypeTask.MAGIC_SQUARE.toString())) {
             task.setMatrixString(task.getMatrixString());
         }
         return task;
     }
 
     @Override
-    public void exportToFile(Task task) {
-
+    public void exportToFile(Task task, OutputStream outputStream) throws IOException {
+        new ImportExportFile(outputStream).writeToFile(task);
     }
 
     @Override
-    public Task importFromFile(InputStream inputStream) {
-        importExportFile = new ImportExportFile(inputStream);
-        return importExportFile.readFromFile();
+    public Task importFromFile(InputStream inputStream) throws IOException {
+        return new ImportExportFile(inputStream).readFromFile();
     }
-
 
 }
